@@ -36,9 +36,8 @@ def predict(time=7):
 
 def update_model(params):
     endpoint = f"{api_url}/update-model"
-    payload = {"params": params}
     try:
-        response = requests.post(endpoint, json=payload)
+        response = requests.post(endpoint, json=params)
         if response.status_code == 200:
             print("Modelparameters bijgewerkt:")
             print(response.json())
@@ -52,11 +51,10 @@ def menu():
     while True:
         print("\n \n \nKies een actie:")
         print("1. Voorspellingen ophalen (/predict)")
-        print("2. Model trainen met nieuwe data (/train)")
-        print("3. Modelparameters updaten (/update-model)")
-        print("4: Exit")
+        print("2. Modelparameters updaten (/update-model)")
+        print("3: Exit")
     
-        keuze = input("Voer je keuze in (1/2/3/4): ")
+        keuze = input("Voer je keuze in (1/2/3): ")
     
         if keuze == "1":
             try:
@@ -64,23 +62,17 @@ def menu():
                 predict(time)
             except ValueError:
                 print("Voer een geldig getal in.")
+
     
-        # elif keuze == "2":
-        #     data_path = input("Geef het pad naar de nieuwe data (CSV-bestand): ")
-        #     if data_path:
-        #         train(data_path)
-        #     else:
-        #         print("Geen data pad opgegeven.")
-    
-        elif keuze == "3":
-            params = input("Voer de parameters in JSON-formaat in (bv. {\"param1\": \"value1\"}): ")
+        elif keuze == "2":
+            params = input("Voer de parameters in JSON-formaat in (bv. {\"seasonal\": \"true\"}): ")
             try:
                 params_dict = json.loads(params)
                 update_model(params_dict)
             except json.JSONDecodeError:
                 print("Ongeldige JSON-invoer. Zorg ervoor dat je een geldig JSON-formaat gebruikt.")
 
-        elif keuze == "4":
+        elif keuze == "3":
             break
 
         else:
